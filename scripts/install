@@ -34,10 +34,10 @@ ynh_setup_source --dest_dir="$install_dir"
 #=================================================
 ynh_script_progression "Adding $app's configuration files..."
 
-ynh_config_add --template="jellyseerr.conf" --destination="$install_dir/jellyseerr.conf"
+ynh_config_add --template=".env" --destination="$install_dir/.env"
 
-chmod 600 "$install_dir/jellyseerr.conf"
-chown "$app:$app" "$install_dir/jellyseerr.conf"
+chmod 600 "$install_dir/.env"
+chown "$app:$app" "$install_dir/.env"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -66,11 +66,10 @@ pushd $install_dir
     ynh_hide_warnings corepack enable
     ynh_hide_warnings npm install -g corepack@latest
     ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@9 --activate
-    
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" npx prisma migrate deploy
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm install --frozen-lockfile --aggregate-output
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm build
 
+    export SEED_SAMPLE_DATA=false
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" npx prisma migrate deploy
+    
     #remove unneeded files
     ynh_hide_warnings ynh_exec_as_app pnpm prune --prod --ignore-scripts
     ynh_hide_warnings ynh_exec_as_app pnpm store prune
