@@ -11,8 +11,8 @@ source /usr/share/yunohost/helpers
 # INITIALIZE AND STORE SETTINGS
 #=================================================
 
-api_key=$(ynh_string_random --length=32)
-ynh_app_setting_set --app=$app --key="api_key" --value="$api_key"
+key=$(ynh_string_random --length=32)
+ynh_app_setting_set --app=$app --key="key" --value="$key"
 
 #=================================================
 # INSTALL DEPENDENCIES
