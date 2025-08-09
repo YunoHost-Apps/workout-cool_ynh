@@ -67,7 +67,6 @@ pushd $install_dir
     ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@9 --activate
 
     export SEED_SAMPLE_DATA=true
-    export DATABASE_URL="postgresql://$db_user:$db_pwd@:5432/$db_name"
     ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm add prisma
     ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" npx prisma migrate deploy
     
