@@ -2,7 +2,7 @@
 
 packaging_format = 2
 
-id = "workout-cool"
+id = "workout_cool"
 name = "Workout.cool"
 description.en = "Modern open-source fitness coaching platform. Create workout plans, track progress, and access a comprehensive exercise database. "
 
