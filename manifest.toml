@@ -40,8 +40,6 @@ ram.runtime = "50M"
     default = "/workout-cool"
 
     [install.init_main_permission]
-    # this is a generic question - ask strings are automatically handled by YunoHost's core
-    # This won't be saved as setting and will instead be used to initialize the SSOwat permission
     type = "group"
     default = "visitors"
 
