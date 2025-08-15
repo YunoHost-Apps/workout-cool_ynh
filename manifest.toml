@@ -51,7 +51,7 @@ ram.runtime = "50M"
 
     [resources.sources.main]
     url = "https://github.com/Snouzy/workout-cool/archive/refs/tags/v1.3.1.tar.gz"
-    sha256 = "4448d05ecd45eb4b0510be21f2497274b257f2af4c5bb8f5dc39ddd622de57fe"
+    sha256 = "8dadcc3286b33b10eca551f624cbba02f34a80f62f8a75c42f93e87f4ddac310"
 
     autoupdate.strategy = "latest_github_release"
 
