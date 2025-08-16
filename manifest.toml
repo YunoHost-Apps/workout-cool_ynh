@@ -2,11 +2,11 @@
 
 packaging_format = 2
 
-id = "workout_cool"
+id = "workout-cool"
 name = "Workout.cool"
 description.en = "Modern open-source fitness coaching platform. Create workout plans, track progress, and access a comprehensive exercise database. "
 
-version = "1.3.0~ynh1"
+version = "1.3.1~ynh1"
 
 maintainers = ["Thovi98"]
 
@@ -35,13 +35,7 @@ ram.runtime = "50M"
     [install.domain]
     type = "domain"
 
-    [install.path]
-    type = "path"
-    default = "/workout.coll"
-
     [install.init_main_permission]
-    # this is a generic question - ask strings are automatically handled by YunoHost's core
-    # This won't be saved as setting and will instead be used to initialize the SSOwat permission
     type = "group"
     default = "visitors"
 
@@ -50,8 +44,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/Snouzy/workout-cool/archive/refs/tags/v1.3.0.tar.gz"
-    sha256 = "4448d05ecd45eb4b0510be21f2497274b257f2af4c5bb8f5dc39ddd622de57fe"
+    url = "https://github.com/Snouzy/workout-cool/archive/refs/tags/v1.3.1.tar.gz"
+    sha256 = "8dadcc3286b33b10eca551f624cbba02f34a80f62f8a75c42f93e87f4ddac310"
 
     autoupdate.strategy = "latest_github_release"
 

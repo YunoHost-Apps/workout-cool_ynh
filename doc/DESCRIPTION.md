@@ -1,1 +1,1 @@
-This is a dummy description of this app features
+Modern fitness coaching platform with comprehensive exercise database.
