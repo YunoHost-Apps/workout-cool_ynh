@@ -58,8 +58,6 @@ pushd $install_dir
     ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm import:exercises-full $install_dir/data/sample-exercises.csv
     #ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm db:seed-workout-advanced
 
-
-    
     #remove unneeded files
     ynh_hide_warnings ynh_exec_as_app pnpm prune --prod --ignore-scripts
     ynh_hide_warnings ynh_exec_as_app pnpm store prune
@@ -68,6 +66,11 @@ pushd $install_dir
 popd
 
 chown -R $app:$app "$install_dir"
+
+# remove unneeded files (thanks to du -h --max-depth=1 /var/www/workout-cool/ | sort -h)
+ynh_safe_rm $install_dir/.next/cache
+ynh_safe_rm $install_dir/.local
+ynh_safe_rm $install_dir/.cache
 
 #=================================================
 # SYSTEM CONFIGURATION
