@@ -34,10 +34,43 @@ ynh_setup_source --dest_dir="$install_dir"
 #=================================================
 ynh_script_progression "Adding $app's configuration files..."
 
-ynh_config_add --template="jellyseerr.conf" --destination="$install_dir/jellyseerr.conf"
+ynh_config_add --template=".env" --destination="$install_dir/.env"
 
-chmod 600 "$install_dir/jellyseerr.conf"
-chown "$app:$app" "$install_dir/jellyseerr.conf"
+chmod 600 "$install_dir/.env"
+chown "$app:$app" "$install_dir/.env"
+
+#=================================================
+# BUILD APP
+#=================================================
+ynh_script_progression "Building App... This may take quiet some time"
+
+pushd $install_dir
+	export CYPRESS_INSTALL_BINARY=0
+    ynh_hide_warnings corepack enable
+    ynh_hide_warnings npm install -g corepack@latest
+    ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@9 --activate
+
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm add prisma
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm build
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" npx prisma migrate deploy
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm db:seed
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm db:seed-plans
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm import:exercises-full $install_dir/data/sample-exercises.csv
+    #ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm db:seed-workout-advanced
+
+    #remove unneeded files
+    ynh_hide_warnings ynh_exec_as_app pnpm prune --prod --ignore-scripts
+    ynh_hide_warnings ynh_exec_as_app pnpm store prune
+
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm add prettier
+popd
+
+chown -R $app:$app "$install_dir"
+
+# remove unneeded files (thanks to du -h --max-depth=1 /var/www/workout-cool/ | sort -h)
+ynh_safe_rm $install_dir/.next/cache
+ynh_safe_rm $install_dir/.local
+ynh_safe_rm $install_dir/.cache
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -56,39 +89,12 @@ ynh_config_add_logrotate
 touch /var/log/$app/$app.log
 
 #=================================================
-# BUILD APP
-#=================================================
-ynh_script_progression "Building App... This may take quiet some time"
-
-pushd $install_dir
-	export CYPRESS_INSTALL_BINARY=0
-    export DATABASE_URL="postgresql://$db_user:$db_pwd@:5432/$db_name"
-    ynh_hide_warnings corepack enable
-    ynh_hide_warnings npm install -g corepack@latest
-    ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@9 --activate
-    
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" npx prisma migrate deploy
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm install --frozen-lockfile --aggregate-output
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm build
-
-    #remove unneeded files
-    ynh_hide_warnings ynh_exec_as_app pnpm prune --prod --ignore-scripts
-    ynh_hide_warnings ynh_exec_as_app pnpm store prune
-    ynh_safe_rm src
-    ynh_safe_rm server
-    ynh_safe_rm .next/cache
-popd
-
-
-chown -R $app:$app "$install_dir"
-
-#=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
 # Start a systemd service
-ynh_systemctl --service="$app" --action="start"  --wait_until="Server ready on port" --log_path="/var/log/$app/$app.log"
+ynh_systemctl --service="$app" --action="start"  --wait_until="" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # END OF SCRIPT

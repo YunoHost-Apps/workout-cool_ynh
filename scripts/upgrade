@@ -59,32 +59,38 @@ ynh_script_progression "Building App... This may take quiet some time"
 
 pushd $install_dir
 	export CYPRESS_INSTALL_BINARY=0
-    export DATABASE_URL="postgresql://$db_user:$db_pwd@:5432/$db_name"
     ynh_hide_warnings corepack enable
     ynh_hide_warnings npm install -g corepack@latest
     ynh_hide_warnings ynh_exec_as_app corepack prepare pnpm@9 --activate
-    
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" npx prisma migrate deploy
-    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm install --frozen-lockfile --aggregate-output
+
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm add prisma
     ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm build
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" npx prisma migrate deploy
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm db:seed
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm db:seed-plans
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm import:exercises-full $install_dir/data/sample-exercises.csv
+    #ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm db:seed-workout-advanced
 
     #remove unneeded files
     ynh_hide_warnings ynh_exec_as_app pnpm prune --prod --ignore-scripts
     ynh_hide_warnings ynh_exec_as_app pnpm store prune
-    ynh_safe_rm src
-    ynh_safe_rm server
-    ynh_safe_rm .next/cache
+
+    ynh_hide_warnings ynh_exec_as_app CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm add prettier
 popd
 
 chown -R $app:$app "$install_dir"
+
+# remove unneeded files (thanks to du -h --max-depth=1 /var/www/workout-cool/ | sort -h)
+ynh_safe_rm $install_dir/.next/cache
+ynh_safe_rm $install_dir/.local
+ynh_safe_rm $install_dir/.cache
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-# Start a systemd service
-ynh_systemctl --service="$app" --action="start"  --wait_until="Server ready on port" --log_path="/var/log/$app/$app.log"
+ynh_systemctl --service="$app" --action="start"  --wait_until="" --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # END OF SCRIPT
