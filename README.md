@@ -4,7 +4,7 @@ It shall NOT be edited by hand.
 -->
 
 <h1>
-  <img src="https://raw.githubusercontent.com/YunoHost/apps/main/logos/workout_cool.png" width="32px" alt="Logo of Workout.cool">
+  <img src="https://raw.githubusercontent.com/YunoHost/apps/main/logos/workout-cool.png" width="32px" alt="Logo of Workout.cool">
   Workout.cool, packaged for YunoHost
 </h1>
 
@@ -12,32 +12,32 @@ Modern open-source fitness coaching platform. Create workout plans, track progre
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://workout.cool/)
 [![App Demo](https://img.shields.io/badge/App_Demo-blue?style=for-the-badge)](https://workout.cool/)
-[![Version: 1.3.0~ynh1](https://img.shields.io/badge/Version-1.3.0~ynh1-rgba(0,150,0,1)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/workout_cool/)
+[![Version: 1.3.1~ynh1](https://img.shields.io/badge/Version-1.3.1~ynh1-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/workout-cool/)
 
 <div align="center">
-<a href="https://apps.yunohost.org/app/workout_cool"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>
-<a href="https://github.com/YunoHost-Apps/workout_cool_ynh/issues"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_report_an_issue.svg"/></a>
+<a href="https://apps.yunohost.org/app/workout-cool"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>
+<a href="https://github.com/YunoHost-Apps/workout-cool_ynh/issues"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_report_an_issue.svg"/></a>
 </div>
 
 
 ## Screenshots
-![Screenshot of Workout.cool](./doc/screenshots/example.jpg)
+![Screenshot of Workout.cool](./doc/screenshots/workout-cool.png)
 
 ## 📦 Developer info
 
-[![Automatic tests level](https://apps.yunohost.org/badge/cilevel/workout_cool)](https://ci-apps.yunohost.org/ci/apps/workout_cool/)
+[![Automatic tests level](https://apps.yunohost.org/badge/cilevel/workout-cool)](https://ci-apps.yunohost.org/ci/apps/workout-cool/)
 
 🛠️ Upstream Workout.cool repository: <https://github.com/Snouzy/workout-cool>
 
-Pull request are welcome and should target the [`testing` branch](https://github.com/YunoHost-Apps/workout_cool_ynh/tree/testing).
+Pull request are welcome and should target the [`testing` branch](https://github.com/YunoHost-Apps/workout-cool_ynh/tree/testing).
 
 The `testing` branch can be tested using:
 ```
 # fresh install:
-sudo yunohost app install https://github.com/YunoHost-Apps/workout_cool_ynh/tree/testing
+sudo yunohost app install https://github.com/YunoHost-Apps/workout-cool_ynh/tree/testing
 
 # upgrade an existing install:
-sudo yunohost app upgrade workout_cool -u https://github.com/YunoHost-Apps/workout_cool_ynh/tree/testing
+sudo yunohost app upgrade workout-cool -u https://github.com/YunoHost-Apps/workout-cool_ynh/tree/testing
 ```
 
 ### 📚 App packaging documentation
